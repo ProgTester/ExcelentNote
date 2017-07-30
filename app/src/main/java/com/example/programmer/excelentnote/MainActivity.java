@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 //    SQLiteDatabase workerWithDB;
     int widgetId = 5;
     Intent resultIntent;
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
         //initializeDataBase();
         initializeMainFrame();
         initializeWidgetId();
+
+        editText = ((EditText)findViewById(R.id.main_edit_text));
+        editText.setSelection(editText.getText().length());
     }
 
     @Override
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         if(share_data.contains(widgetId + "")) {
             editor.remove(widgetId + "");
         }
-        editor.putString(widgetId + "", ((EditText)findViewById(R.id.main_edit_text)).getText().toString());
+        editor.putString(widgetId + "", editText.getText().toString());
         editor.commit();
 
         Widget.updateWidget(this, AppWidgetManager.getInstance(this), share_data, widgetId);
@@ -57,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fillMainEditText() {
         SharedPreferences share_data = getSharedPreferences("widget_preference", Context.MODE_PRIVATE);
-        ((EditText)findViewById(R.id.main_edit_text)).setText(share_data.getString(widgetId + "", null));
+        editText.setText(share_data.getString(widgetId + "", null));
     }
 
 //    private String getFromMainEditText() {
@@ -178,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            String insert_data = ((EditText)findViewById(R.id.main_edit_text)).getText().toString();
+            String insert_data = editText.getText().toString();
             if(insert_data != null && insert_data != "") {
                 widgetStart(insert_data);
 

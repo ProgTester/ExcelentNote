@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
-import static com.example.programmer.excelentnote.R.layout.widget;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Programmer on 24.07.2017.
@@ -25,7 +25,7 @@ public class Widget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
-        SharedPreferences share_data = context.getSharedPreferences("widget_preference", Context.MODE_PRIVATE);
+        SharedPreferences share_data = context.getSharedPreferences("widget_preference", MODE_PRIVATE);
 
         for(int widget_id : appWidgetIds) {
             updateWidget(context, appWidgetManager, share_data, widget_id);
@@ -34,7 +34,7 @@ public class Widget extends AppWidgetProvider {
 
     public static void updateWidget(Context context, AppWidgetManager manager, SharedPreferences share_data, int widget_id) {
         String text_data = share_data.getString(widget_id + "", null);
-        RemoteViews widget_view = new RemoteViews(context.getPackageName(), widget);
+        RemoteViews widget_view = new RemoteViews(context.getPackageName(), R.layout.widget);
         widget_view.setTextViewText(R.id.main_text_view, text_data);
 
         //обработка нажатия на виджет
@@ -51,6 +51,14 @@ public class Widget extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
+        SharedPreferences share_data = context.getSharedPreferences("widget_preference", MODE_PRIVATE);
+        SharedPreferences.Editor editor = share_data.edit();
+
+        for(int widget_id : appWidgetIds) {
+            if(share_data.contains(widget_id + "")) {
+                editor.remove(widget_id + "");
+            }
+        }
     }
 
     @Override
