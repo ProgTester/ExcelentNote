@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
         // положительный ответ
         setResult(RESULT_OK, resultIntent);
-
         finish();
     }
 
