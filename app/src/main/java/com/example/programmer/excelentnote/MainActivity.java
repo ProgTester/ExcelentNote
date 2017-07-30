@@ -1,30 +1,21 @@
 package com.example.programmer.excelentnote;
 
 import android.appwidget.AppWidgetManager;
-import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Canvas;
-import android.os.StrictMode;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    DataBase dataBase;
-    SQLiteDatabase workerWithDB;
+//    DataBase dataBase;
+//    SQLiteDatabase workerWithDB;
     int widgetId = 5;
     Intent resultIntent;
 
@@ -35,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_LONG).show();
 
         initializeButtonListener();
-        initializeDataBase();
+        //initializeDataBase();
         initializeMainFrame();
         initializeWidgetId();
     }
@@ -46,13 +37,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void widgetStart(String insert_data) {
-        putToDataBase(insert_data);
+        //putToDataBase(insert_data);
 
         // Записываем значения с экрана в Preferences
-        SharedPreferences sp = getSharedPreferences("widget_preference", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("widget_text", getFromDataBase());
+        SharedPreferences share_data = getSharedPreferences("widget_preference", MODE_PRIVATE);
+        SharedPreferences.Editor editor = share_data.edit();
+        if(share_data.contains(widgetId + "")) {
+            editor.remove(widgetId + "");
+        }
+        editor.putString(widgetId + "", ((EditText)findViewById(R.id.main_edit_text)).getText().toString());
         editor.commit();
+
+        Widget.updateWidget(this, AppWidgetManager.getInstance(this), share_data, widgetId);
 
         // положительный ответ
         setResult(RESULT_OK, resultIntent);
@@ -60,46 +56,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fillMainEditText() {
-        ((EditText)findViewById(R.id.main_edit_text)).setText(getFromDataBase());
+        SharedPreferences share_data = getSharedPreferences("widget_preference", Context.MODE_PRIVATE);
+        ((EditText)findViewById(R.id.main_edit_text)).setText(share_data.getString(widgetId + "", null));
     }
 
-    private String getFromMainEditText() {
-        return ((EditText)findViewById(R.id.main_edit_text)).getText().toString();
-    }
+//    private String getFromMainEditText() {
+//        return ((EditText)findViewById(R.id.main_edit_text)).getText().toString();
+//    }
 
-    private void putToDataBase(String text) {
-        ContentValues content = new ContentValues();
-        content.put("value", text);
-        if(getFromDataBase() != null) {
-            workerWithDB.update("WidgetTable", content, "id = ?", new String[] {widgetId + ""});
-        }
-        else {
-            content.put("id", widgetId);
-            workerWithDB.insert("WidgetTable", null, content);
-        }
-    }
-
-    private String getFromDataBase() {
-        String result_data = null;
-        int num_data_column, num_id_column;
-        Cursor c = workerWithDB.query("WidgetTable", null, null, null, null, null, null);
-        try {
-            if(c.moveToFirst()) {
-                do {
-                    num_id_column = c.getColumnIndex("id");
-                    if (c.getInt(num_id_column) == widgetId) {
-                        num_data_column = c.getColumnIndex("value");
-                        result_data = c.getString(num_data_column);
-
-                    }
-                } while (c.moveToNext());
-            }
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "getDBException", Toast.LENGTH_LONG).show();
-        }
-        c.close();
-        return result_data;
-    }
+//    private void putToDataBase(String text) {
+//        ContentValues content = new ContentValues();
+//        content.put("value", text);
+//        if(getFromDataBase() != null) {
+//            workerWithDB.update("WidgetTable", content, "id = ?", new String[] {widgetId + ""});
+//        }
+//        else {
+//            content.put("id", widgetId);
+//            workerWithDB.insert("WidgetTable", null, content);
+//        }
+//    }
+//
+//    private String getFromDataBase() {
+//        String result_data = null;
+//        int num_data_column, num_id_column;
+//        Cursor c = workerWithDB.query("WidgetTable", null, null, null, null, null, null);
+//        try {
+//            if(c.moveToFirst()) {
+//                do {
+//                    num_id_column = c.getColumnIndex("id");
+//                    if (c.getInt(num_id_column) == widgetId) {
+//                        num_data_column = c.getColumnIndex("value");
+//                        result_data = c.getString(num_data_column);
+//
+//                    }
+//                } while (c.moveToNext());
+//            }
+//        } catch (Exception e) {
+//            Toast.makeText(getApplicationContext(), "getDBException", Toast.LENGTH_LONG).show();
+//        }
+//        c.close();
+//        return result_data;
+//    }
 
     private void initializeWidgetId() {
         Intent intent = getIntent();
@@ -122,10 +119,10 @@ public class MainActivity extends AppCompatActivity {
         setResult(RESULT_CANCELED, resultIntent);
     }
 
-    private void initializeDataBase() {
-        dataBase = new DataBase(this);
-        workerWithDB = dataBase.getWritableDatabase();
-    }
+//    private void initializeDataBase() {
+//        dataBase = new DataBase(this);
+//        workerWithDB = dataBase.getWritableDatabase();
+//    }
 
     private void initializeMainFrame() {
         FrameLayout main_frame = (FrameLayout)findViewById(R.id.main_frame);
