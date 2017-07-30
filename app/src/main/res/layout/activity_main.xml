@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_line_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="com.example.programmer.excelentnote.MainActivity">
+
+    <FrameLayout
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#f9bb57" />
+
+        <Button
+            android:id="@+id/button_ok"
+
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:alpha="0.6"
+            android:background="#ff802b"
+            android:text="Ok" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/test_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test\ntext"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/backgroundTextEdit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/backgroundColor" />
+
+        <FrameLayout
+            android:id="@+id/main_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="15dp"
+
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="7dp"
+            android:orientation="vertical">
+
+            <!--<FrameLayout-->
+            <!--android:id="@+id/separate_layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+
+            <!--android:orientation="vertical">-->
+
+            <!--</FrameLayout>-->
+
+            <EditText
+                android:id="@+id/main_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:background="#00000000"
+                android:ems="10"
+                android:gravity="top"
+                android:textSize="22sp" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+</LinearLayout>
